@@ -1,26 +1,73 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>World Map with Markers and Left Sidebar</title>
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <link href="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.css" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.js"></script>
-</head>
-<body>
-<div id="map"></div>
-<div id="sidebar" class="sidebar">
-  <div class="sidebar-header">
-    <button class="close-btn" onclick="closeSidebar()">×</button>
-    <h2 id="location-title">Station</h2>
-    <p id="location-subtitle">Click for details</p>
-  </div>
-  <div class="sidebar-content" id="sidebar-content">
-    <!-- Content will be populated here -->
-  </div>
-</div>
+  <head>
+    <meta charset="utf-8" />
+    <title>Weather Map</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.js"></script>
+    <link rel="icon" href="assets/weather-balloon.png" type="image/png" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <button class="close-btn" onclick="closeSidebar()">×</button>
+        <h2 id="location-title">Station</h2>
+        <p id="location-subtitle">Click for details</p>
+      </div>
+      <div class="sidebar-content" id="sidebar-content">
+        <!-- Content will be populated here -->
+      </div>
+    </div>
+    <div id="info-sidebar" class="info-sidebar">
+      <h2>Weather Station Monitor</h2>
+      <p>
+        Explore weather stations from around the world and view their historical
+        data.
+      </p>
 
-<script type="module" src="app.js"></script>
-</body>
+      <h3>Features</h3>
+      <ul>
+        <li>
+          <strong>Interactive Map:</strong> Click on station clusters to zoom in
+          and explore individual stations
+        </li>
+        <li>
+          <strong>Station Details:</strong> Click any station marker to view
+          detailed information and weather history
+        </li>
+        <li>
+          <strong>Historical Data:</strong> View temperature, wind, pressure,
+          and precipitation data over time
+        </li>
+        <li>
+          <strong>Clustering:</strong> Stations are grouped by proximity for
+          easy navigation
+        </li>
+      </ul>
+
+      <h3>How to Use</h3>
+      <ol>
+        <li>Zoom and pan the map to explore different regions</li>
+        <li>Click on blue cluster circles to zoom into a region</li>
+        <li>
+          Click on individual station markers to view detailed weather data
+        </li>
+        <li>Scroll through the historical data table to see weather trends</li>
+      </ol>
+    </div>
+
+    <script type="module" src="app.js"></script>
+  </body>
 </html>
