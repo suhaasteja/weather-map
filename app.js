@@ -83,7 +83,7 @@ function processTemperatureData(points) {
       dataByDate[dateKey] = {};
     }
     
-    // Store temperature for this hour (if multiple readings, take average)
+    // Store temperature for this hour
     if (!dataByDate[dateKey][hour]) {
       dataByDate[dateKey][hour] = [];
     }
@@ -139,31 +139,31 @@ function createTemperatureHeatmap(historyData) {
     });
   });
   
-  // Create color ranges based on actual data
+  // Create color ranges based on actual data with temperature ranges
   const tempRange = maxTemp - minTemp;
   const colorRanges = [
     {
       from: minTemp,
       to: minTemp + tempRange * 0.25,
-      name: 'Cold',
+      name: `${Math.round(minTemp)}°F - ${Math.round(minTemp + tempRange * 0.25)}°F`,
       color: '#0066CC'
     },
     {
       from: minTemp + tempRange * 0.25,
       to: minTemp + tempRange * 0.5,
-      name: 'Cool',
+      name: `${Math.round(minTemp + tempRange * 0.25)}°F - ${Math.round(minTemp + tempRange * 0.5)}°F`,
       color: '#00A8E8'
     },
     {
       from: minTemp + tempRange * 0.5,
       to: minTemp + tempRange * 0.75,
-      name: 'Warm',
+      name: `${Math.round(minTemp + tempRange * 0.5)}°F - ${Math.round(minTemp + tempRange * 0.75)}°F`,
       color: '#FFB200'
     },
     {
       from: minTemp + tempRange * 0.75,
       to: maxTemp,
-      name: 'Hot',
+      name: `${Math.round(minTemp + tempRange * 0.75)}°F - ${Math.round(maxTemp)}°F`,
       color: '#FF5733'
     }
   ];
@@ -501,9 +501,10 @@ function closeSidebar() {
 
 window.closeSidebar = closeSidebar;
 
-// integrate station history api
+// integrate station history api - done
 // average stats for each station
 // create heatmaps for each station weather or other best representation for weather
 // have a permanent sidebar (right) to explain what this product does
 // showcase path for markers based on its previous locations
 // refer to live weather data to show possible wind/temperature in nearby areas
+// add live flight data
