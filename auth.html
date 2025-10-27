@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Weather Map - Authentication</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="icon" href="assets/weather-balloon.png" type="image/png" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .auth-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        max-width: 450px;
+        width: 100%;
+        animation: slideIn 0.5s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .auth-header h1 {
+        color: #333;
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .auth-header p {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-group label {
+        display: block;
+        color: #555;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-submit:active {
+        transform: translateY(0);
+      }
+
+      .btn-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .error-message {
+        background: #fee;
+        color: #c33;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        display: none;
+        border-left: 4px solid #c33;
+      }
+
+      .error-message.show {
+        display: block;
+        animation: shake 0.5s ease;
+      }
+
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+      }
+
+      .info-box {
+        background: #f0f4ff;
+        border-left: 4px solid #667eea;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+      }
+
+      .info-box h3 {
+        color: #667eea;
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+
+      .info-box p {
+        color: #666;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .info-box code {
+        background: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #667eea;
+        font-family: 'Courier New', monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-container">
+      <div class="auth-header">
+        <h1>🎈 Weather Map</h1>
+        <p>Enter your Mapbox API key to access the application</p>
+      </div>
+
+      <div id="error-message" class="error-message"></div>
+
+      <form id="auth-form">
+        <div class="form-group">
+          <label for="api-key">Mapbox API Key</label>
+          <input
+            type="password"
+            id="api-key"
+            placeholder="pk.eyJ1..."
+            required
+            autocomplete="off"
+          />
+        </div>
+
+        <button type="submit" class="btn-submit" id="submit-btn">
+          Access Application
+        </button>
+      </form>
+
+      <div class="info-box">
+        <h3>🔒 Security Note</h3>
+        <p>
+          Your API key is stored locally in your browser session only.
+          It is never sent to any external server except Mapbox's official API.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById('auth-form');
+      const apiKeyInput = document.getElementById('api-key');
+      const submitBtn = document.getElementById('submit-btn');
+      const errorMessage = document.getElementById('error-message');
+
+      // Check if already authenticated
+      const storedKey = sessionStorage.getItem('mapbox_api_key');
+      if (storedKey) {
+        window.location.href = 'index.html';
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const apiKey = apiKeyInput.value.trim();
+        
+        if (!apiKey) {
+          showError('Please enter an API key');
+          return;
+        }
+
+        if (!apiKey.startsWith('pk.')) {
+          showError('Invalid Mapbox API key format. It should start with "pk."');
+          return;
+        }
+
+        // Store the API key in session storage
+        sessionStorage.setItem('mapbox_api_key', apiKey);
+        sessionStorage.setItem('auth_timestamp', Date.now());
+        
+        // Redirect to main application
+        window.location.href = 'index.html';
+      });
+
+      function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.classList.add('show');
+        
+        setTimeout(() => {
+          errorMessage.classList.remove('show');
+        }, 5000);
+      }
+    </script>
+  </body>
+</html>

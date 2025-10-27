@@ -1,6 +1,13 @@
-import { MAPBOX_TOKEN } from "./config.js";
+// Check if user has provided API key
+const storedKey = sessionStorage.getItem('mapbox_api_key');
 
-mapboxgl.accessToken = MAPBOX_TOKEN;
+if (!storedKey) {
+  // Redirect to authentication page to get API key
+  window.location.href = 'auth.html';
+} else {
+  // Use the API key from session storage
+  mapboxgl.accessToken = storedKey;
+}
 
 const map = new mapboxgl.Map({
   container: "map",
@@ -685,6 +692,14 @@ function closeSidebar() {
 }
 
 window.closeSidebar = closeSidebar;
+
+// Logout functionality
+document.getElementById('logout-btn').addEventListener('click', () => {
+  if (confirm('Are you sure you want to logout? You will need to re-enter your API key.')) {
+    sessionStorage.removeItem('mapbox_api_key');
+    window.location.href = 'auth.html';
+  }
+});
 
 // create heatmaps for each station weather or other best representation for weather - temperature done
 // retry api or error handling for api format failure
